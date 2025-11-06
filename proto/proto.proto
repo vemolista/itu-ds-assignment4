@@ -1,10 +1,23 @@
 syntax = "proto3";
 option go_package = "github.com/vemolista/itu-ds-assignment4/proto";
 
-message Test {
-    string user = 1;
+message RequestAccessRequest {
+
 }
 
-service A {
-    rpc One(Test) returns (Test);
+message RequestAccessResponse {
+
+}
+
+message ReplyRequest {
+
+}
+
+message ReplyResponse {
+
+}
+
+service RicartAgrawala {
+    rpc RequestAccess(RequestAccessRequest) returns (RequestAccessResponse);
+    rpc Reply(ReplyRequest) returns (ReplyResponse);
 }
