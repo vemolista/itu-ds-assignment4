@@ -1,2 +1,6 @@
 # macOS
 .DS_Store
+
+# Generated proto code
+proto/proto.pb.go
+proto/proto_grpc.pb.go

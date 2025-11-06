@@ -1,0 +1,10 @@
+syntax = "proto3";
+option go_package = "github.com/vemolista/itu-ds-assignment4/proto";
+
+message Test {
+    string user = 1;
+}
+
+service A {
+    rpc One(Test) returns (Test);
+}
