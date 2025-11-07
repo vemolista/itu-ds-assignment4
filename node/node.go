@@ -1,9 +1,7 @@
 package node
 
 import (
-	"encoding/json"
-	"fmt"
-	"io"
+	"log"
 	"os"
 	"sync"
 
@@ -22,6 +20,8 @@ const (
 )
 
 type Node struct {
+	proto.UnimplementedRicartAgrawalaServer
+
 	id              string
 	port            string
 	clock           *clock.LamportClock
@@ -29,58 +29,57 @@ type Node struct {
 	replyCount      int
 	deferredReplies []string
 
+	logger *log.Logger
+
+	mu sync.Mutex
+
 	// Server
 	grpcServer *grpc.Server
 
 	// Clients
-	peerClients map[string]proto.RicartAgrawalaClient
-	peersConfig Config
+	peerConnections map[string]*grpc.ClientConn
+	peers           map[string]proto.RicartAgrawalaClient
 
-	mu sync.Mutex
+	peersConfig Config
 }
 
 type Config struct {
 	Nodes []struct {
-		Id      string `json:"id"`
-		Address string `json:"address"`
+		Id   string `json:"id"`
+		Port string `json:"port"`
 	} `json:"nodes"`
 }
 
-func NewNode(id, port, configPath string) (*Node, error) {
-	configFile, err := os.Open(configPath)
-	if err != nil {
-		return nil, fmt.Errorf("cannot open file: %w", err)
-	}
-	defer configFile.Close()
-
-	var config Config
-	bytes, err := io.ReadAll(configFile)
-	if err != nil {
-		return nil, fmt.Errorf("cannot read bytes: %w", err)
-	}
-	json.Unmarshal(bytes, &config)
+func NewNode(index int, config *Config) (*Node, error) {
+	n := config.Nodes[index]
+	logger := log.New(os.Stderr, "", 0)
 
 	node := &Node{
-		id:              id,
-		port:            port,
+		id:              n.Id,
+		port:            n.Port,
 		clock:           &clock.LamportClock{},
 		state:           Released,
 		replyCount:      0,
 		deferredReplies: make([]string, 0),
 
+		logger: logger,
+
 		grpcServer: grpc.NewServer(),
 
-		peerClients: make(map[string]proto.RicartAgrawalaClient),
-		peersConfig: config,
+		peerConnections: make(map[string]*grpc.ClientConn),
+		peers:           make(map[string]proto.RicartAgrawalaClient),
+		peersConfig:     *config,
 	}
 
 	return node, nil
 }
 
 func (n *Node) Start() error {
-	n.startServer()
+	n.logger.Println("starting node")
+
+	go n.startServer()
 	n.connectToPeers()
-	n.simulate()
+	// n.simulate()
 
 	// Start gRPC server
 	// Connect to peers

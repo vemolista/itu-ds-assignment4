@@ -17,7 +17,12 @@ message ReplyResponse {
 
 }
 
+message Empty {
+    
+}
+
 service RicartAgrawala {
     rpc RequestAccess(RequestAccessRequest) returns (RequestAccessResponse);
     rpc Reply(ReplyRequest) returns (ReplyResponse);
+    rpc HealthCheck(Empty) returns (Empty);
 }
