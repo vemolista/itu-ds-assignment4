@@ -29,3 +29,9 @@ Run three nodes (in separate terminals)
 ```
 
 Observe logs in `./app.log`
+
+## Configuring
+
+You can add and remove nodes in `config.json`.
+
+Nodes will wait until they can establish a connection to all other nodes before the simulation is started.
