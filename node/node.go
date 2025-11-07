@@ -1,9 +1,12 @@
 package node
 
 import (
+	"context"
 	"log"
+	"math/rand/v2"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/vemolista/itu-ds-assignment4/clock"
 	"github.com/vemolista/itu-ds-assignment4/proto"
@@ -26,8 +29,7 @@ type Node struct {
 	port            string
 	clock           *clock.LamportClock
 	state           NodeState
-	replyCount      int
-	deferredReplies []string
+	deferredReplies map[string]chan struct{}
 
 	logger *log.Logger
 
@@ -59,8 +61,7 @@ func NewNode(index int, config *Config) (*Node, error) {
 		port:            n.Port,
 		clock:           &clock.LamportClock{},
 		state:           Released,
-		replyCount:      0,
-		deferredReplies: make([]string, 0),
+		deferredReplies: make(map[string]chan struct{}),
 
 		logger: logger,
 
@@ -79,33 +80,54 @@ func (n *Node) Start() error {
 
 	go n.startServer()
 	n.connectToPeers()
-	// n.simulate()
 
-	// Start gRPC server
-	// Connect to peers
-	// Start simulation
+	// TODO: wait until all peers are connected
+
+	n.simulate()
 
 	return nil
 }
 
 func (n *Node) simulate() {
+	for {
+		time.Sleep(time.Duration(rand.IntN(5)+3) * time.Second)
+		n.RequestCriticalSection()
+		n.logger.Println("in critical section")
 
+		// working in the critical section
+		time.Sleep(time.Duration(rand.IntN(3000)) * time.Millisecond)
+
+		n.ReleaseCriticalSection()
+	}
 }
 
 func (n *Node) RequestCriticalSection() {
-	// Increment clock
-	// Set state = wanted
-	// Send RequestAccess to all peers
-	// Wait for replies
-}
+	// TODO: Increment clock
 
-func (n *Node) EnterCriticalSection() {
-	// Log entry
-	// Simulate work (sleep)
-	// Log exit
+	n.mu.Lock()
+	n.state = Wanted
+	n.mu.Unlock()
+
+	for _, peer := range n.peers {
+		peer.RequestAccess(context.Background(), &proto.RequestAccessRequest{
+			Timestamp: n.clock.Get(),
+			NodeId:    n.id,
+		})
+	}
+
+	n.mu.Lock()
+	n.state = Held
+	n.mu.Unlock()
 }
 
 func (n *Node) ReleaseCriticalSection() {
-	// Send REPLY to deferred nodes
-	// Set state to released
+	n.mu.Lock()
+	defer n.mu.Unlock()
+
+	n.state = Released
+	n.logger.Println("state set to released")
+
+	for _, v := range n.deferredReplies {
+		v <- struct{}{}
+	}
 }

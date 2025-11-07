@@ -7,12 +7,38 @@ import (
 	"github.com/vemolista/itu-ds-assignment4/proto"
 )
 
+func requesterIsSmaller(requesterClock, responderClock int64, requesterId, responderId string) bool {
+	if requesterClock < responderClock {
+		return true
+	}
+
+	if requesterClock > responderClock {
+		return false
+	}
+
+	// Clocks must be equal at this point, compare ids
+
+	if requesterId < responderId {
+		return true
+	}
+
+	return false
+}
+
 func (n *Node) RequestAccess(ctx context.Context, r *proto.RequestAccessRequest) (*proto.RequestAccessResponse, error) {
-	// update clock
+	n.mu.Lock()
+	if (n.state == Held) || (n.state == Wanted && requesterIsSmaller(r.Timestamp, n.clock.Get(), r.NodeId, n.id)) {
+		n.deferredReplies[r.NodeId] = make(chan struct{})
+		n.mu.Unlock()
 
-	// reply or wait
+		<-n.deferredReplies[r.NodeId]
 
-	return nil, nil
+		n.mu.Lock()
+		delete(n.deferredReplies, r.NodeId)
+	}
+	n.mu.Unlock()
+
+	return &proto.RequestAccessResponse{}, nil
 }
 
 func (n *Node) Reply(ctx context.Context, r *proto.ReplyRequest) (*proto.ReplyResponse, error) {

@@ -2,11 +2,12 @@ syntax = "proto3";
 option go_package = "github.com/vemolista/itu-ds-assignment4/proto";
 
 message RequestAccessRequest {
-
+    string nodeId = 1;
+    int64 timestamp = 2;
 }
 
 message RequestAccessResponse {
-
+    
 }
 
 message ReplyRequest {
