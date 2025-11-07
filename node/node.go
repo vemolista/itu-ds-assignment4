@@ -1,6 +1,10 @@
 package node
 
 import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
 	"sync"
 
 	"github.com/vemolista/itu-ds-assignment4/clock"
@@ -21,7 +25,7 @@ type Node struct {
 	id              string
 	port            string
 	clock           *clock.LamportClock
-	requesting      bool
+	state           NodeState
 	replyCount      int
 	deferredReplies []string
 
@@ -29,23 +33,64 @@ type Node struct {
 	grpcServer *grpc.Server
 
 	// Clients
-	peers map[string]proto.RicartAgrawalaClient
+	peerClients map[string]proto.RicartAgrawalaClient
+	peersConfig Config
 
 	mu sync.Mutex
 }
 
-func NewNode(id, port, configPath string) (*Node, error) {
-	// node constructor
+type Config struct {
+	Nodes []struct {
+		Id      string `json:"id"`
+		Address string `json:"address"`
+	} `json:"nodes"`
+}
 
-	return nil, nil
+func NewNode(id, port, configPath string) (*Node, error) {
+	configFile, err := os.Open(configPath)
+	if err != nil {
+		return nil, fmt.Errorf("cannot open file: %w", err)
+	}
+	defer configFile.Close()
+
+	var config Config
+	bytes, err := io.ReadAll(configFile)
+	if err != nil {
+		return nil, fmt.Errorf("cannot read bytes: %w", err)
+	}
+	json.Unmarshal(bytes, &config)
+
+	node := &Node{
+		id:              id,
+		port:            port,
+		clock:           &clock.LamportClock{},
+		state:           Released,
+		replyCount:      0,
+		deferredReplies: make([]string, 0),
+
+		grpcServer: grpc.NewServer(),
+
+		peerClients: make(map[string]proto.RicartAgrawalaClient),
+		peersConfig: config,
+	}
+
+	return node, nil
 }
 
 func (n *Node) Start() error {
+	n.startServer()
+	n.connectToPeers()
+	n.simulate()
+
 	// Start gRPC server
 	// Connect to peers
 	// Start simulation
 
 	return nil
+}
+
+func (n *Node) simulate() {
+
 }
 
 func (n *Node) RequestCriticalSection() {
