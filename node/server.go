@@ -39,12 +39,12 @@ func (n *Node) RequestAccess(ctx context.Context, r *proto.Request) (*proto.Repl
 
 		<-n.deferredReplies[r.NodeId]
 
-		n.logger.Printf("replying to node: %s\n", r.NodeId)
 		n.mu.Lock()
 		delete(n.deferredReplies, r.NodeId)
 	}
 	n.mu.Unlock()
 
+	n.logger.Printf("replying to node: %s\n", r.NodeId)
 	return &proto.Reply{}, nil
 }
 
