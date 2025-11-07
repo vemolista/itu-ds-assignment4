@@ -7,7 +7,7 @@ import (
 )
 
 type NodeLogger struct {
-	*log.Logger
+	logger   *log.Logger
 	nodeId   string
 	getClock func() int64
 	file     *os.File
@@ -19,36 +19,27 @@ func NewNodeLogger(nodeId string, getClock func() int64, filePath string) (*Node
 		return nil, fmt.Errorf("failed to open log file: %w", err)
 	}
 
-	nl := &NodeLogger{
+	logger := log.New(file, "", log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
+
+	return &NodeLogger{
+		logger:   logger,
 		nodeId:   nodeId,
 		getClock: getClock,
 		file:     file,
-	}
-
-	nl.Logger = log.New(file, fmt.Sprintf("[Node: %s] [Clock: %d] ", nl.nodeId, getClock()), log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
-
-	return nl, nil
+	}, nil
 }
 
-// // Println prepends the dynamic clock/node prefix and delegates to the embedded logger
-// func (l *NodeLogger) Println(v ...interface{}) {
-// 	prefix := fmt.Sprintf("[Clock: %d] [Node: %s] ", l.getClock(), l.nodeId)
-// 	l.Logger.Println(prefix + fmt.Sprint(v...))
-// }
+func (l *NodeLogger) Println(v ...interface{}) {
+	prefix := fmt.Sprintf("[Node: %s] [Clock: %d] ", l.nodeId, l.getClock())
+	l.logger.SetPrefix(prefix)
+	l.logger.Println(v...)
+}
 
-// // Printf prepends the dynamic clock/node prefix and delegates to the embedded logger
-// func (l *NodeLogger) Printf(format string, v ...interface{}) {
-// 	prefix := fmt.Sprintf("[Clock: %d] [Node: %s] ", l.getClock(), l.nodeId)
-// 	l.Logger.Printf(prefix+format, v...)
-// }
-
-// // Fatalf behaves like Printf but exits after closing file
-// func (l *NodeLogger) Fatalf(format string, v ...interface{}) {
-// 	prefix := fmt.Sprintf("[Clock: %d] [Node: %s] ", l.getClock(), l.nodeId)
-// 	l.Logger.Printf(prefix+format, v...)
-// 	l.file.Close()
-// 	os.Exit(1)
-// }
+func (l *NodeLogger) Printf(format string, v ...interface{}) {
+	prefix := fmt.Sprintf("[Node: %s] [Clock: %d] ", l.nodeId, l.getClock())
+	l.logger.SetPrefix(prefix)
+	l.logger.Printf(format, v...)
+}
 
 func (l *NodeLogger) Close() error {
 	// Flush any buffered data to disk before closing

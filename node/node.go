@@ -2,6 +2,7 @@ package node
 
 import (
 	"context"
+	"fmt"
 	"math/rand/v2"
 	"sync"
 	"time"
@@ -91,6 +92,7 @@ func (n *Node) simulate() {
 		time.Sleep(time.Duration(rand.IntN(5)+3) * time.Second)
 		n.RequestCriticalSection()
 		n.logger.Println("in critical section")
+		fmt.Println("in critical section")
 
 		// working in the critical section
 		time.Sleep(time.Duration(rand.IntN(3000)) * time.Millisecond)
@@ -100,15 +102,15 @@ func (n *Node) simulate() {
 }
 
 func (n *Node) RequestCriticalSection() {
-	// TODO: Increment clock
-
+	n.logger.Println("requesting critical section")
 	n.mu.Lock()
 	n.state = Wanted
+	requestTimestamp := n.clock.Increment()
 	n.mu.Unlock()
 
 	for _, peer := range n.peers {
 		peer.RequestAccess(context.Background(), &proto.Request{
-			Timestamp: n.clock.Get(),
+			Timestamp: requestTimestamp,
 			NodeId:    n.id,
 		})
 	}
@@ -122,8 +124,11 @@ func (n *Node) ReleaseCriticalSection() {
 	n.mu.Lock()
 	defer n.mu.Unlock()
 
+	n.clock.Increment()
+
 	n.state = Released
-	n.logger.Println("state set to released")
+	n.logger.Println("releasing critical section")
+	fmt.Println("releasing critical section")
 
 	for _, v := range n.deferredReplies {
 		v <- struct{}{}

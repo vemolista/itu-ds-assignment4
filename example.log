@@ -1,0 +1,40 @@
+[Node: node1] [Clock: 0] 2025/11/07 15:28:25.539182 logger.go:35: starting node
+[Node: node1] [Clock: 0] 2025/11/07 15:28:25.539371 logger.go:41: skipping connection to self, peer.Id: node1, self.Id: node1
+[Node: node1] [Clock: 0] 2025/11/07 15:28:25.539506 logger.go:35: server starting
+[Node: node1] [Clock: 0] 2025/11/07 15:28:25.570339 logger.go:41: failed to connect to peer.Id: node2. retrying.
+[Node: node2] [Clock: 0] 2025/11/07 15:28:27.266005 logger.go:35: starting node
+[Node: node2] [Clock: 0] 2025/11/07 15:28:27.266265 logger.go:35: server starting
+[Node: node2] [Clock: 0] 2025/11/07 15:28:27.271004 logger.go:41: connected to peer: node1
+[Node: node2] [Clock: 0] 2025/11/07 15:28:27.271034 logger.go:41: skipping connection to self, peer.Id: node2, self.Id: node2
+[Node: node2] [Clock: 0] 2025/11/07 15:28:27.272698 logger.go:41: failed to connect to peer.Id: node3. retrying.
+[Node: node1] [Clock: 0] 2025/11/07 15:28:28.575509 logger.go:41: connected to peer: node2
+[Node: node1] [Clock: 0] 2025/11/07 15:28:28.577306 logger.go:41: failed to connect to peer.Id: node3. retrying.
+[Node: node3] [Clock: 0] 2025/11/07 15:28:29.091443 logger.go:35: starting node
+[Node: node3] [Clock: 0] 2025/11/07 15:28:29.091686 logger.go:35: server starting
+[Node: node3] [Clock: 0] 2025/11/07 15:28:29.095571 logger.go:41: connected to peer: node1
+[Node: node3] [Clock: 0] 2025/11/07 15:28:29.097806 logger.go:41: connected to peer: node2
+[Node: node3] [Clock: 0] 2025/11/07 15:28:29.097831 logger.go:41: skipping connection to self, peer.Id: node3, self.Id: node3
+[Node: node2] [Clock: 0] 2025/11/07 15:28:30.277479 logger.go:41: connected to peer: node3
+[Node: node1] [Clock: 0] 2025/11/07 15:28:31.581360 logger.go:41: connected to peer: node3
+[Node: node1] [Clock: 0] 2025/11/07 15:28:34.582489 logger.go:35: requesting critical section
+[Node: node1] [Clock: 1] 2025/11/07 15:28:34.584178 logger.go:35: in critical section
+[Node: node3] [Clock: 0] 2025/11/07 15:28:35.098840 logger.go:35: requesting critical section
+[Node: node2] [Clock: 0] 2025/11/07 15:28:35.278643 logger.go:35: requesting critical section
+[Node: node1] [Clock: 3] 2025/11/07 15:28:37.550362 logger.go:35: releasing critical section
+[Node: node3] [Clock: 2] 2025/11/07 15:28:37.551627 logger.go:35: in critical section
+[Node: node3] [Clock: 3] 2025/11/07 15:28:38.267804 logger.go:35: releasing critical section
+[Node: node2] [Clock: 1] 2025/11/07 15:28:38.268712 logger.go:35: in critical section
+[Node: node2] [Clock: 2] 2025/11/07 15:28:39.422839 logger.go:35: releasing critical section
+[Node: node1] [Clock: 3] 2025/11/07 15:28:40.551619 logger.go:35: requesting critical section
+[Node: node1] [Clock: 4] 2025/11/07 15:28:40.552999 logger.go:35: in critical section
+[Node: node1] [Clock: 5] 2025/11/07 15:28:41.359167 logger.go:35: releasing critical section
+[Node: node3] [Clock: 3] 2025/11/07 15:28:42.269003 logger.go:35: requesting critical section
+[Node: node3] [Clock: 4] 2025/11/07 15:28:42.270280 logger.go:35: in critical section
+[Node: node2] [Clock: 2] 2025/11/07 15:28:42.423968 logger.go:35: requesting critical section
+[Node: node3] [Clock: 6] 2025/11/07 15:28:44.044410 logger.go:35: releasing critical section
+[Node: node2] [Clock: 3] 2025/11/07 15:28:44.044983 logger.go:35: in critical section
+[Node: node2] [Clock: 4] 2025/11/07 15:28:46.648110 logger.go:35: releasing critical section
+[Node: node1] [Clock: 5] 2025/11/07 15:28:47.360379 logger.go:35: requesting critical section
+[Node: node1] [Clock: 6] 2025/11/07 15:28:47.361504 logger.go:35: in critical section
+[Node: node3] [Clock: 6] 2025/11/07 15:28:48.045635 logger.go:35: requesting critical section
+[Node: node1] [Clock: 9] 2025/11/07 15:28:50.044274 logger.go:35: releasing critical section

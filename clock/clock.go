@@ -30,5 +30,8 @@ func (c *LamportClock) Update(requestTime int64) int64 {
 }
 
 func (c *LamportClock) Get() int64 {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
 	return c.timestamp
 }

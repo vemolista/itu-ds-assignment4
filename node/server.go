@@ -3,6 +3,7 @@ package node
 import (
 	"context"
 	"net"
+	"os"
 
 	"github.com/vemolista/itu-ds-assignment4/proto"
 )
@@ -27,7 +28,9 @@ func requesterIsSmaller(requesterClock, responderClock int64, requesterId, respo
 
 func (n *Node) RequestAccess(ctx context.Context, r *proto.Request) (*proto.Reply, error) {
 	n.mu.Lock()
+
 	if (n.state == Held) || (n.state == Wanted && requesterIsSmaller(r.Timestamp, n.clock.Get(), r.NodeId, n.id)) {
+		n.clock.Update(r.Timestamp)
 		n.deferredReplies[r.NodeId] = make(chan struct{})
 		n.mu.Unlock()
 
@@ -51,11 +54,13 @@ func (n *Node) startServer() error {
 
 	listener, err := net.Listen("tcp", n.port)
 	if err != nil {
-		n.logger.Fatalf("failed to create a %s listener on port %s: %v\n", "tcp", n.port, err)
+		n.logger.Println("failed to create a %s listener on port %s: %v\n", "tcp", n.port, err)
+		os.Exit(1)
 	}
 
 	if err := n.grpcServer.Serve(listener); err != nil {
-		n.logger.Fatalf("failed to start serving requests: %v", err)
+		n.logger.Println("failed to start serving requests: %v", err)
+		os.Exit(1)
 	}
 
 	return nil
