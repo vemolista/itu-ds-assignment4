@@ -33,6 +33,7 @@ func (n *Node) connectToPeers() error {
 			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 			_, err = client.HealthCheck(ctx, &proto.Empty{})
 			if err == nil {
+				cancel()
 				break
 			}
 			cancel()
@@ -50,12 +51,4 @@ func (n *Node) connectToPeers() error {
 	}
 
 	return nil
-}
-
-func (n *Node) sendRequestToAll() {
-	// broadcast to all peers
-}
-
-func (n *Node) sendReply(nodeID string) {
-	// send reply to specific node
 }

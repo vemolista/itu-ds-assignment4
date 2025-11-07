@@ -25,7 +25,7 @@ func requesterIsSmaller(requesterClock, responderClock int64, requesterId, respo
 	return false
 }
 
-func (n *Node) RequestAccess(ctx context.Context, r *proto.RequestAccessRequest) (*proto.RequestAccessResponse, error) {
+func (n *Node) RequestAccess(ctx context.Context, r *proto.Request) (*proto.Reply, error) {
 	n.mu.Lock()
 	if (n.state == Held) || (n.state == Wanted && requesterIsSmaller(r.Timestamp, n.clock.Get(), r.NodeId, n.id)) {
 		n.deferredReplies[r.NodeId] = make(chan struct{})
@@ -38,11 +38,7 @@ func (n *Node) RequestAccess(ctx context.Context, r *proto.RequestAccessRequest)
 	}
 	n.mu.Unlock()
 
-	return &proto.RequestAccessResponse{}, nil
-}
-
-func (n *Node) Reply(ctx context.Context, r *proto.ReplyRequest) (*proto.ReplyResponse, error) {
-	return nil, nil
+	return &proto.Reply{}, nil
 }
 
 func (n *Node) HealthCheck(ctx context.Context, r *proto.Empty) (*proto.Empty, error) {

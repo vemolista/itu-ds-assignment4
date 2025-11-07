@@ -1,20 +1,12 @@
 syntax = "proto3";
 option go_package = "github.com/vemolista/itu-ds-assignment4/proto";
 
-message RequestAccessRequest {
+message Request {
     string nodeId = 1;
     int64 timestamp = 2;
 }
 
-message RequestAccessResponse {
-    
-}
-
-message ReplyRequest {
-
-}
-
-message ReplyResponse {
+message Reply {
 
 }
 
@@ -23,7 +15,6 @@ message Empty {
 }
 
 service RicartAgrawala {
-    rpc RequestAccess(RequestAccessRequest) returns (RequestAccessResponse);
-    rpc Reply(ReplyRequest) returns (ReplyResponse);
+    rpc RequestAccess(Request) returns (Reply);
     rpc HealthCheck(Empty) returns (Empty);
 }

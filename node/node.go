@@ -109,7 +109,7 @@ func (n *Node) RequestCriticalSection() {
 	n.mu.Unlock()
 
 	for _, peer := range n.peers {
-		peer.RequestAccess(context.Background(), &proto.RequestAccessRequest{
+		peer.RequestAccess(context.Background(), &proto.Request{
 			Timestamp: n.clock.Get(),
 			NodeId:    n.id,
 		})
