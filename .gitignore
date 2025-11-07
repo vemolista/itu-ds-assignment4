@@ -4,3 +4,9 @@
 # Generated proto code
 proto/proto.pb.go
 proto/proto_grpc.pb.go
+
+# Log files
+app.log
+
+# Binary
+itu-ds-assignment4

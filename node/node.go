@@ -2,9 +2,7 @@ package node
 
 import (
 	"context"
-	"log"
 	"math/rand/v2"
-	"os"
 	"sync"
 	"time"
 
@@ -31,7 +29,7 @@ type Node struct {
 	state           NodeState
 	deferredReplies map[string]chan struct{}
 
-	logger *log.Logger
+	logger *NodeLogger
 
 	mu sync.Mutex
 
@@ -54,7 +52,6 @@ type Config struct {
 
 func NewNode(index int, config *Config) (*Node, error) {
 	n := config.Nodes[index]
-	logger := log.New(os.Stderr, "", 0)
 
 	node := &Node{
 		id:              n.Id,
@@ -63,14 +60,18 @@ func NewNode(index int, config *Config) (*Node, error) {
 		state:           Released,
 		deferredReplies: make(map[string]chan struct{}),
 
-		logger: logger,
-
 		grpcServer: grpc.NewServer(),
 
 		peerConnections: make(map[string]*grpc.ClientConn),
 		peers:           make(map[string]proto.RicartAgrawalaClient),
 		peersConfig:     *config,
 	}
+
+	logger, err := NewNodeLogger(n.Id, node.clock.Get, "app.log")
+	if err != nil {
+		return nil, err
+	}
+	node.logger = logger
 
 	return node, nil
 }
@@ -80,9 +81,6 @@ func (n *Node) Start() error {
 
 	go n.startServer()
 	n.connectToPeers()
-
-	// TODO: wait until all peers are connected
-
 	n.simulate()
 
 	return nil

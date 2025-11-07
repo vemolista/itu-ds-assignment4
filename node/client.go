@@ -40,7 +40,7 @@ func (n *Node) connectToPeers() error {
 
 			n.logger.Printf("failed to connect to peer.Id: %s. retrying.\n", peer.Id)
 			conn.Close()
-			time.Sleep(500 * time.Millisecond)
+			time.Sleep(3 * time.Second)
 
 		}
 
