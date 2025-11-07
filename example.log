@@ -1,0 +1,70 @@
+[Node: node1] [Clock: 0] 2025/11/07 15:41:07.215046 logger.go:35: starting node
+[Node: node1] [Clock: 0] 2025/11/07 15:41:07.215207 logger.go:41: skipping connection to self, peer.Id: node1, self.Id: node1
+[Node: node1] [Clock: 0] 2025/11/07 15:41:07.215217 logger.go:35: server starting
+[Node: node1] [Clock: 0] 2025/11/07 15:41:07.217343 logger.go:41: failed to connect to peer.Id: node2. retrying.
+[Node: node2] [Clock: 0] 2025/11/07 15:41:08.170516 logger.go:35: starting node
+[Node: node2] [Clock: 0] 2025/11/07 15:41:08.170696 logger.go:35: server starting
+[Node: node2] [Clock: 0] 2025/11/07 15:41:08.175129 logger.go:41: connected to peer: node1
+[Node: node2] [Clock: 0] 2025/11/07 15:41:08.175157 logger.go:41: skipping connection to self, peer.Id: node2, self.Id: node2
+[Node: node2] [Clock: 0] 2025/11/07 15:41:08.176851 logger.go:41: failed to connect to peer.Id: node3. retrying.
+[Node: node3] [Clock: 0] 2025/11/07 15:41:09.688678 logger.go:35: starting node
+[Node: node3] [Clock: 0] 2025/11/07 15:41:09.688848 logger.go:35: server starting
+[Node: node3] [Clock: 0] 2025/11/07 15:41:09.692328 logger.go:41: connected to peer: node1
+[Node: node3] [Clock: 0] 2025/11/07 15:41:09.694109 logger.go:41: connected to peer: node2
+[Node: node3] [Clock: 0] 2025/11/07 15:41:09.694129 logger.go:41: skipping connection to self, peer.Id: node3, self.Id: node3
+[Node: node1] [Clock: 0] 2025/11/07 15:41:10.221123 logger.go:41: connected to peer: node2
+[Node: node1] [Clock: 0] 2025/11/07 15:41:10.223027 logger.go:41: connected to peer: node3
+[Node: node2] [Clock: 0] 2025/11/07 15:41:11.182218 logger.go:41: connected to peer: node3
+[Node: node1] [Clock: 0] 2025/11/07 15:41:14.224100 logger.go:35: requesting critical section
+[Node: node3] [Clock: 0] 2025/11/07 15:41:14.224970 logger.go:41: request received from node: node1
+[Node: node3] [Clock: 0] 2025/11/07 15:41:14.225033 logger.go:41: replying to node: node1
+[Node: node2] [Clock: 0] 2025/11/07 15:41:14.225715 logger.go:41: request received from node: node1
+[Node: node2] [Clock: 0] 2025/11/07 15:41:14.225762 logger.go:41: replying to node: node1
+[Node: node1] [Clock: 1] 2025/11/07 15:41:14.225968 logger.go:35: in critical section
+[Node: node3] [Clock: 0] 2025/11/07 15:41:15.694145 logger.go:35: requesting critical section
+[Node: node1] [Clock: 1] 2025/11/07 15:41:15.694905 logger.go:41: request received from node: node3
+[Node: node1] [Clock: 2] 2025/11/07 15:41:15.694964 logger.go:41: deferring reply to node: node3
+[Node: node1] [Clock: 3] 2025/11/07 15:41:16.176114 logger.go:35: releasing critical section
+[Node: node1] [Clock: 3] 2025/11/07 15:41:16.176296 logger.go:41: replying to node: node3
+[Node: node2] [Clock: 0] 2025/11/07 15:41:16.177166 logger.go:41: request received from node: node3
+[Node: node2] [Clock: 0] 2025/11/07 15:41:16.177279 logger.go:41: replying to node: node3
+[Node: node3] [Clock: 1] 2025/11/07 15:41:16.177499 logger.go:35: in critical section
+[Node: node2] [Clock: 0] 2025/11/07 15:41:17.183341 logger.go:35: requesting critical section
+[Node: node1] [Clock: 3] 2025/11/07 15:41:17.184063 logger.go:41: request received from node: node2
+[Node: node1] [Clock: 3] 2025/11/07 15:41:17.184116 logger.go:41: replying to node: node2
+[Node: node3] [Clock: 1] 2025/11/07 15:41:17.184641 logger.go:41: request received from node: node2
+[Node: node3] [Clock: 2] 2025/11/07 15:41:17.184694 logger.go:41: deferring reply to node: node2
+[Node: node3] [Clock: 3] 2025/11/07 15:41:17.486541 logger.go:35: releasing critical section
+[Node: node3] [Clock: 3] 2025/11/07 15:41:17.486844 logger.go:41: replying to node: node2
+[Node: node2] [Clock: 1] 2025/11/07 15:41:17.487310 logger.go:35: in critical section
+[Node: node1] [Clock: 3] 2025/11/07 15:41:20.176815 logger.go:35: requesting critical section
+[Node: node2] [Clock: 1] 2025/11/07 15:41:20.177435 logger.go:41: request received from node: node1
+[Node: node2] [Clock: 5] 2025/11/07 15:41:20.177491 logger.go:41: deferring reply to node: node1
+[Node: node2] [Clock: 6] 2025/11/07 15:41:20.205556 logger.go:35: releasing critical section
+[Node: node2] [Clock: 6] 2025/11/07 15:41:20.205725 logger.go:41: replying to node: node1
+[Node: node3] [Clock: 3] 2025/11/07 15:41:20.206663 logger.go:41: request received from node: node1
+[Node: node3] [Clock: 3] 2025/11/07 15:41:20.206726 logger.go:41: replying to node: node1
+[Node: node1] [Clock: 4] 2025/11/07 15:41:20.206934 logger.go:35: in critical section
+[Node: node1] [Clock: 5] 2025/11/07 15:41:21.576054 logger.go:35: releasing critical section
+[Node: node3] [Clock: 3] 2025/11/07 15:41:23.487774 logger.go:35: requesting critical section
+[Node: node1] [Clock: 5] 2025/11/07 15:41:23.488452 logger.go:41: request received from node: node3
+[Node: node1] [Clock: 5] 2025/11/07 15:41:23.488503 logger.go:41: replying to node: node3
+[Node: node2] [Clock: 6] 2025/11/07 15:41:23.489194 logger.go:41: request received from node: node3
+[Node: node2] [Clock: 6] 2025/11/07 15:41:23.489249 logger.go:41: replying to node: node3
+[Node: node3] [Clock: 4] 2025/11/07 15:41:23.489489 logger.go:35: in critical section
+[Node: node3] [Clock: 5] 2025/11/07 15:41:24.606688 logger.go:35: releasing critical section
+[Node: node2] [Clock: 6] 2025/11/07 15:41:26.206732 logger.go:35: requesting critical section
+[Node: node3] [Clock: 5] 2025/11/07 15:41:26.207376 logger.go:41: request received from node: node2
+[Node: node3] [Clock: 5] 2025/11/07 15:41:26.207417 logger.go:41: replying to node: node2
+[Node: node1] [Clock: 5] 2025/11/07 15:41:26.207914 logger.go:41: request received from node: node2
+[Node: node1] [Clock: 5] 2025/11/07 15:41:26.207959 logger.go:41: replying to node: node2
+[Node: node2] [Clock: 7] 2025/11/07 15:41:26.208170 logger.go:35: in critical section
+[Node: node1] [Clock: 5] 2025/11/07 15:41:26.577233 logger.go:35: requesting critical section
+[Node: node2] [Clock: 7] 2025/11/07 15:41:26.577901 logger.go:41: request received from node: node1
+[Node: node2] [Clock: 8] 2025/11/07 15:41:26.577944 logger.go:41: deferring reply to node: node1
+[Node: node2] [Clock: 9] 2025/11/07 15:41:26.839413 logger.go:35: releasing critical section
+[Node: node2] [Clock: 9] 2025/11/07 15:41:26.839622 logger.go:41: replying to node: node1
+[Node: node3] [Clock: 5] 2025/11/07 15:41:26.840433 logger.go:41: request received from node: node1
+[Node: node3] [Clock: 5] 2025/11/07 15:41:26.840496 logger.go:41: replying to node: node1
+[Node: node1] [Clock: 6] 2025/11/07 15:41:26.840671 logger.go:35: in critical section
+[Node: node1] [Clock: 7] 2025/11/07 15:41:27.675802 logger.go:35: releasing critical section
